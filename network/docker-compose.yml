@@ -1,0 +1,188 @@
+version: '2'
+
+volumes:
+  orderer.drug-network.com:
+  peer0.manufacturer.drug-network.com:
+  peer1.manufacturer.drug-network.com:
+  peer0.distributor.drug-network.com:
+  peer1.distributor.drug-network.com:
+  peer0.transporter.drug-network.com:
+  peer1.transporter.drug-network.com:
+
+networks:
+  drug:
+
+services:
+
+  ca.manufacturer.drug-network.com:
+    image: hyperledger/fabric-ca:latest
+    environment:
+      - FABRIC_CA_HOME=/etc/hyperledger/fabric-ca-server
+      - FABRIC_CA_SERVER_CA_NAME=ca.manufacturer.drug-network.com
+      - FABRIC_CA_SERVER_TLS_ENABLED=false
+      # - FABRIC_CA_SERVER_TLS_CERTFILE=/etc/hyperledger/fabric-ca-server-config/ca.manufacturer.drug-network.com-cert.pem
+      # - FABRIC_CA_SERVER_TLS_KEYFILE=/etc/hyperledger/fabric-ca-server-config/754fccf4ad3f6a483161cf597b79fbdbdadaf1ee2f024e79da8c8e9b8bfb6dcb_sk
+    ports:
+      - "7054:7054"
+    command: sh -c 'fabric-ca-server start -b admin:adminpw -d' # --ca.certfile /etc/hyperledger/fabric-ca-server-config/ca.manufacturer.drug-network.com-cert.pem --ca.keyfile /etc/hyperledger/fabric-ca-server-config/754fccf4ad3f6a483161cf597b79fbdbdadaf1ee2f024e79da8c8e9b8bfb6dcb_sk
+    volumes:
+      - ./crypto-config/peerOrganizations/manufacturer.drug-network.com/ca/:/etc/hyperledger/fabric-ca-server-config
+    container_name: ca.manufacturer.drug-network.com
+    networks:
+      - drug
+
+  ca.distributor.drug-network.com:
+    image: hyperledger/fabric-ca:latest
+    environment:
+      - FABRIC_CA_HOME=/etc/hyperledger/fabric-ca-server
+      - FABRIC_CA_SERVER_CA_NAME=ca.distributor.drug-network.com
+      - FABRIC_CA_SERVER_TLS_ENABLED=false
+      # - FABRIC_CA_SERVER_TLS_CERTFILE=/etc/hyperledger/fabric-ca-server-config/ca.distributor.drug-network.com-cert.pem
+      # - FABRIC_CA_SERVER_TLS_KEYFILE=/etc/hyperledger/fabric-ca-server-config/69f46c1ef51a71ee0aaadc9cef23aef7b44df2b1e84dad62484980170c01aa22_sk
+    ports:
+      - "8054:7054"
+    command: sh -c 'fabric-ca-server start -b admin:adminpw -d' # --ca.certfile /etc/hyperledger/fabric-ca-server-config/ca.distributor.drug-network.com-cert.pem --ca.keyfile /etc/hyperledger/fabric-ca-server-config/69f46c1ef51a71ee0aaadc9cef23aef7b44df2b1e84dad62484980170c01aa22_sk
+    volumes:
+      - ./crypto-config/peerOrganizations/distributor.drug-network.com/ca/:/etc/hyperledger/fabric-ca-server-config
+    container_name: ca.distributor.drug-network.com
+    networks:
+      - drug
+
+  ca.transporter.drug-network.com:
+    image: hyperledger/fabric-ca:latest
+    environment:
+      - FABRIC_CA_HOME=/etc/hyperledger/fabric-ca-server
+      - FABRIC_CA_SERVER_CA_NAME=ca.transporter.drug-network.com
+      - FABRIC_CA_SERVER_TLS_ENABLED=false
+      # - FABRIC_CA_SERVER_TLS_CERTFILE=/etc/hyperledger/fabric-ca-server-config/ca.transporter.drug-network.com-cert.pem
+      # - FABRIC_CA_SERVER_TLS_KEYFILE=/etc/hyperledger/fabric-ca-server-config/9ed31fcf7a2fd649ac2e52254a041e4244dca899f86e6532789601c6fe18a019_sk
+    ports:
+      - "9054:7054"
+    command: sh -c 'fabric-ca-server start -b admin:adminpw -d' # --ca.certfile /etc/hyperledger/fabric-ca-server-config/ca.transporter.drug-network.com-cert.pem --ca.keyfile /etc/hyperledger/fabric-ca-server-config/9ed31fcf7a2fd649ac2e52254a041e4244dca899f86e6532789601c6fe18a019_sk
+    volumes:
+      - ./crypto-config/peerOrganizations/transporter.drug-network.com/ca/:/etc/hyperledger/fabric-ca-server-config
+    container_name: ca.transporter.drug-network.com
+    networks:
+      - drug
+
+  orderer.drug-network.com:
+    extends:
+      file:   docker-base/docker-compose-base.yaml
+      service: orderer.drug-network.com
+    container_name: orderer.drug-network.com
+    networks:
+      - drug
+
+  peer0.manufacturer.drug-network.com:
+    container_name: peer0.manufacturer.drug-network.com
+    extends:
+      file:  docker-base/docker-compose-base.yaml
+      service: peer0.manufacturer.drug-network.com
+    networks:
+      - drug
+
+  peer1.manufacturer.drug-network.com:
+    container_name: peer1.manufacturer.drug-network.com
+    extends:
+      file:  docker-base/docker-compose-base.yaml
+      service: peer1.manufacturer.drug-network.com
+    networks:
+      - drug
+
+  peer0.distributor.drug-network.com:
+    container_name: peer0.distributor.drug-network.com
+    extends:
+      file:  docker-base/docker-compose-base.yaml
+      service: peer0.distributor.drug-network.com
+    networks:
+      - drug
+
+  peer1.distributor.drug-network.com:
+    container_name: peer1.distributor.drug-network.com
+    extends:
+      file:  docker-base/docker-compose-base.yaml
+      service: peer1.distributor.drug-network.com
+    networks:
+      - drug
+
+  peer0.transporter.drug-network.com:
+    container_name: peer0.transporter.drug-network.com
+    extends:
+      file:  docker-base/docker-compose-base.yaml
+      service: peer0.transporter.drug-network.com
+    networks:
+      - drug
+
+  peer1.transporter.drug-network.com:
+    container_name: peer1.transporter.drug-network.com
+    extends:
+      file:  docker-base/docker-compose-base.yaml
+      service: peer1.transporter.drug-network.com
+    networks:
+      - drug
+
+  cli:
+    container_name: cli
+    image: hyperledger/fabric-tools:latest
+    tty: true
+    stdin_open: true
+    environment:
+      - GOPATH=/opt/gopath
+      - CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock
+      - FABRIC_LOGGING_SPEC=INFO
+      - CORE_PEER_ID=cli
+      - CORE_PEER_ADDRESS=peer0.manufacturer.drug-network.com:7051
+      - CORE_PEER_LOCALMSPID=manufacturerMSP
+      - CORE_PEER_TLS_ENABLED=false
+      - CORE_PEER_TLS_CERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/manufacturer.drug-network.com/peers/peer0.manufacturer.drug-network.com/tls/server.crt
+      - CORE_PEER_TLS_KEY_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/manufacturer.drug-network.com/peers/peer0.manufacturer.drug-network.com/tls/server.key
+      - CORE_PEER_TLS_ROOTCERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/manufacturer.drug-network.com/peers/peer0.manufacturer.drug-network.com/tls/ca.crt
+      - CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/manufacturer.drug-network.com/users/Admin@manufacturer.drug-network.com/msp
+    working_dir: /opt/gopath/src/github.com/hyperledger/fabric/peer
+    command: /bin/bash
+    volumes:
+      - /var/run/:/host/var/run/
+      - ./../chaincode/:/opt/gopath/src/github.com/hyperledger/fabric/peer/chaincode/
+    #  - ./../chaincode-advanced/:/opt/gopath/src/github.com/hyperledger/fabric/peer/chaincode-advanced/
+      - ./crypto-config:/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/
+      - ./scripts:/opt/gopath/src/github.com/hyperledger/fabric/peer/scripts/
+      - ./channel-artifacts:/opt/gopath/src/github.com/hyperledger/fabric/peer/channel-artifacts
+    depends_on:
+      - ca.manufacturer.drug-network.com
+      - ca.distributor.drug-network.com
+      - ca.transporter.drug-network.com
+      - orderer.drug-network.com
+      - peer0.manufacturer.drug-network.com
+      - peer1.manufacturer.drug-network.com
+      - peer0.distributor.drug-network.com
+      - peer1.distributor.drug-network.com
+      - peer0.transporter.drug-network.com
+      - peer1.transporter.drug-network.com
+    networks:
+      - drug
+
+  chaincode:
+    container_name: chaincode
+    image: hyperledger/fabric-ccenv:latest
+    tty: true
+    environment:
+      - GOPATH=/opt/gopath
+      - CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock
+      - FABRIC_LOGGING_SPEC=INFO
+      - CORE_PEER_ID=chaincode
+      - CORE_PEER_ADDRESS=peer0.manufacturer.drug-network.com:7051
+      - CORE_PEER_LOCALMSPID=manufacturerMSP
+      - CORE_PEER_TLS_ENABLED=false
+      - CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/crypto/peerOrganizations/manufacturer.drug-network.com/users/Admin@manufacturer.drug-network.com/msp
+      - CORE_TLS_CLIENT_KEY_PATH=/opt/gopath/src/crypto/peerOrganizations/manufacturer.drug-network.com/users/Admin@manufacturer.drug-network.com/tls/client.key
+      - CORE_TLS_CLIENT_CERT_PATH=/opt/gopath/src/crypto/peerOrganizations/manufacturer.drug-network.com/users/Admin@manufacturer.drug-network.com/tls/client.crt
+      - CORE_PEER_TLS_ROOTCERT_FILE=/opt/gopath/src/crypto/peerOrganizations/manufacturer.drug-network.com/users/Admin@manufacturer.drug-network.com/tls/ca.crt
+    working_dir: /opt/gopath/src/chaincode
+    command: /bin/bash -c 'sleep 6000000'
+    volumes:
+      - /var/run/:/host/var/run/
+      - ./../chaincode:/opt/gopath/src/chaincode
+     # - ./../chaincode-advanced:/opt/gopath/src/chaincode-advanced
+      - ./crypto-config:/opt/gopath/src/crypto
+    networks:
+      - drug
