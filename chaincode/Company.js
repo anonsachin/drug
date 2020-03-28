@@ -22,7 +22,7 @@ class Company{
   static createInstance(companyObject){
     return new Company(companyObject);
   }
-
+  
 }
 
 module.exports = Company;
