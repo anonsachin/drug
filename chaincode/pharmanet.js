@@ -49,11 +49,31 @@ class Pharmanet extends Contract{
   }
 
   async getHistory(ctx,drugName,serialNo){
-    //  key
-    let drugKey = ctx.stub.createCompositeKey(Drug.getClass(),[drugName+'-'+serialNo]);
-    let iterator = await ctx.stub.getHistoryForKey(companyKey);
-    let result = await getAllResults(iterator);
-    return result;
+    try {
+      //  key
+      let drugKey = ctx.stub.createCompositeKey(Drug.getClass(),[drugName,serialNo]);
+      let iterator = await ctx.stub.getHistoryForKey(drugKey);
+      let result = await getAllResults(iterator);
+      return result;
+    } catch (e) {
+      console.log("This is the Error: "+e);
+      console.log(e.stack);
+    }
+  }
+
+  async  viewDrugCurrentState(ctx,drugName,serialNo){
+    try {
+      // drugKey
+      let drugKey = ctx.stub.createCompositeKey(Drug.getClass(),[drugName,serialNo]);
+      let drug = await ctx.stub.getState(drugKey);
+      if (drug.toString() === "") {
+        throw new Error("There is no such drug");
+      }
+      return Drug.fromBuffer(drug);
+    } catch (e) {
+      console.log("This is the Error: "+e);
+      console.log(e.stack);
+    }
   }
 
 }
@@ -64,7 +84,7 @@ async function getAllResults(iterator) {
   const allResults = [];
   while (true) {
       const res = await iterator.next();
-      console.log(res);
+      
       if (res.value) {
           // if not a getHistoryForKey iterator then key is contained in res.value.key
           allResults.push(res.value.value.toString('utf8'));

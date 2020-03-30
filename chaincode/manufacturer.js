@@ -18,7 +18,7 @@ class Manufacturer extends Contract {
         throw new Error("THIS IS ONLY FOR Manufacturers");
       }
       //  key
-      let drugKey = ctx.stub.createCompositeKey(Drug.getClass(),[drugName+'-'+serialNo]);
+      let drugKey = ctx.stub.createCompositeKey(Drug.getClass(),[drugName,serialNo]);
 
       //  getting the manufacturer
       let iterator = await ctx.stub.getStateByPartialCompositeKey(Company.getClass(),[companyCRN]);
@@ -36,11 +36,9 @@ class Manufacturer extends Contract {
         owner: man,
         shipment: []
       };
-      console.log(drug);
       let drugObject = Drug.createInstance(drug);
-      console.log(drugObject);
       // storing on blockchain
-      await ctx.stub.putState(Drug.getClass(),drugObject.toBuffer());
+      await ctx.stub.putState(drugKey,drugObject.toBuffer());
 
       return drugObject;
 

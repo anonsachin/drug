@@ -16,7 +16,7 @@ set -x
 cryptogen generate --config=./crypto-config.yaml
 res=$?
 set +x
-if [res -ne 0 ]; then
+if [ $res -ne 0 ]; then
   echo 'Failed to generate certs..'
   exit 1
 fi
@@ -32,7 +32,7 @@ set -x
 configtxgen -profile OrdererGenesis -channelID drug-sys-channel -outputBlock ./channel-artifacts/genesis.block
 res=$?
 set +x
-if [res -ne 0]; then
+if [ $res -ne 0 ]; then
   echo "Failed to create the genesis block"
 fi
 echo
@@ -45,7 +45,7 @@ set -x
 configtxgen -profile drugChannel -outputCreateChannelTx ./channel-artifacts/channel.tx -channelID "$CHANNEL_NAME"
 res=$?
 set +x
-if [ res -ne 0 ]; then
+if [ $res -ne 0 ]; then
   echo "Failed to create the channel tx"
 fi
 echo
@@ -58,7 +58,7 @@ set -x
 configtxgen -profile drugChannel -outputAnchorPeersUpdate ./channel-artifacts/manufacturerMSPanchor.tx -channelID "$CHANNEL_NAME" -asOrg manufacturerMSP
 res=$?
 set +x
-if [ res -ne 0 ]; then
+if [ $res -ne 0 ]; then
   echo "Update transaction not successful"
 fi
 echo
@@ -71,7 +71,7 @@ set -x
 configtxgen -profile drugChannel -outputAnchorPeersUpdate ./channel-artifacts/transporterMSPanchor.tx -channelID "$CHANNEL_NAME" -asOrg transporterMSP
 res=$?
 set +x
-if [ res -ne 0 ]; then
+if [ $res -ne 0 ]; then
   echo "Update transaction not successful"
 fi
 echo
@@ -110,7 +110,7 @@ set -x
 configtxgen -profile drugChannel -outputAnchorPeersUpdate ./channel-artifacts/distributorMSPanchor.tx -channelID "$CHANNEL_NAME" -asOrg distributorMSP
 res=$?
 set +x
-if [ res -ne 0 ]; then
+if [ $res -ne 0 ]; then
   echo "Update transaction not successful"
 fi
 echo

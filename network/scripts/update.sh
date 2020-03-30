@@ -55,10 +55,10 @@ ORGS="manufacturer transporter distributor"
 # retailer  consumer
 
 for iG in $ORGS; do
+  setGlobals $iG 0
   echo "##################################################################################"
   echo "###################### UPDATING ANCHORPEER FOR $CORE_PEER_LOCALMSPID #########################"
   echo "##################################################################################"
-  setGlobals $iG 0
   sleep $DELAY
   set -x
   peer channel update -o orderer.drug-network.com:7050 -c $CHANNEL_NAME -f ./channel-artifacts/${CORE_PEER_LOCALMSPID}anchor.tx
