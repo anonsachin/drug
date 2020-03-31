@@ -4,6 +4,7 @@ const {Contract} = require('fabric-contract-api');
 const Drug = require('./Drug.js');
 const Company = require('./Company.js');
 const Po = require('./PO.js');
+const Shipement = require('./Shipment.js')
 
 class Transfer extends Contract {
   constructor() {
@@ -34,7 +35,7 @@ class Transfer extends Contract {
       let purchase = {
         poID: pokey,
         drugName: drugName,
-        quantity: quantity,
+        quantity: Number(quantity),
         buyer: buyerObject.companyID,
         seller: sellerObject.companyID
       }
@@ -49,6 +50,107 @@ class Transfer extends Contract {
       console.log(e.stack);
     }
   }
+
+  async createShipment(ctx,buyerCRN,drugName,listOfAssets,transporterCRN){
+    try {
+      listOfAssets = JSON.parse(listOfAssets)
+      // key
+      let pokey = ctx.stub.createCompositeKey(Po.getClass(),[buyerCRN,drugName]);
+      // retrieving the order
+      let po = await ctx.stub.getState(pokey);
+      if(po.toString() === ""){
+        throw new Error("This purchase order does'nt exist");
+      }
+      let order = Po.fromBuffer(po);
+      // extracting quantity
+      let quantity = Number(order.quantity);
+
+      // checking length
+      if(Number(listOfAssets.length) !== quantity){
+        throw new Error("There not enough assets in the list to create shipment");
+      }
+
+      // extracting needed elements and creating asset list
+      let assets =[]
+      let creator = null
+      for (var i = 0; i < listOfAssets.length; i++) {
+        let assetKey = ctx.stub.createCompositeKey(Drug.getClass(),[drugName,listOfAssets[i]]);
+        let asset  = await ctx.stub.getState(assetKey);
+        if(asset.toString() === ""){
+          throw new Error("INVALID ID at postion :" + i);
+        }
+        if( i === 0){
+          asset = Drug.fromBuffer(asset);
+          creator = asset.owner;
+        }
+        assets.push(assetKey);
+      }
+      //  getting the transporter
+      let iterator = await ctx.stub.getStateByPartialCompositeKey(Company.getClass(),[transporterCRN]);
+      let results = await getAllResults(iterator);
+      //  extracting company
+      let company = JSON.parse(results[0])
+      let transporter = company.companyID;
+      // key
+      let shipmentKey = ctx.stub.createCompositeKey(Shipement.getClass(),[buyerCRN,drugName]);
+      // Create Shipement
+      let shipment = {
+        shipmentID: shipmentKey,
+        creator: creator,
+        assets: assets,
+        transporter: transporter,
+        status: "in-transit"
+      }
+      let shipmentObject = Shipement.createInstance(shipment);
+      // storing
+      await ctx.stub.putState(shipmentKey,shipmentObject.toBuffer());
+      return shipmentObject;
+    } catch (e) {
+    console.log("This is the error: "+e);
+    console.log(e.stack);
+    }
+  }
+
+  async updateShipment(ctx,buyerCRN,drugName,transporterCRN){
+    try {
+      // shipment key
+      let shipmentKey = ctx.stub.createCompositeKey(Shipement.getClass(),[buyerCRN,drugName]);
+      // shipment
+      let shipment = await ctx.stub.getState(shipmentKey);
+      if(shipment.toString() === ""){
+        throw new Error("This shipment does'nt exist");
+      }
+      shipment = Shipement.fromBuffer(shipment);
+      //  status changed
+      shipment.status = 'delivered';
+      // buyer companyKey
+      let iterator_buy = await ctx.stub.getStateByPartialCompositeKey(Company.getClass(),[buyerCRN]);
+      let buyer = await getAllResults(iterator_buy);
+      let buyerObject = JSON.parse(buyer[0]);
+      // updating drugs
+      let getKey = null;
+      let putKey = null;
+      let drug = null
+      for (var i = 0; i < shipment.assets.length; i++) {
+        getKey = ctx.stub.splitCompositeKey(shipment.assets[i]);
+        putKey = ctx.stub.createCompositeKey(getKey.objectType,getKey.attributes);
+        drug = await ctx.stub.getState(putKey);
+        drug = Drug.fromBuffer(drug);
+        drug.owner = buyerObject.companyID;
+        drug.shipment.push(shipmentKey);
+        await ctx.stub.putState(putKey,drug.toBuffer());
+      }
+
+      await ctx.stub.putState(shipmentKey,shipment.toBuffer());
+
+      return shipment;
+
+    } catch (e) {
+      console.log("This is the error: "+e);
+      console.log(e.stack);
+    }
+  }
+
 }
 
 async function getAllResults(iterator) {
