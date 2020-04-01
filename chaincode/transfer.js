@@ -113,6 +113,8 @@ class Transfer extends Contract {
 
   async updateShipment(ctx,buyerCRN,drugName,transporterCRN){
     try {
+      // validation
+      let msp = ctx.clientIdentity.getMSPID();
       // shipment key
       let shipmentKey = ctx.stub.createCompositeKey(Shipement.getClass(),[buyerCRN,drugName]);
       // shipment
@@ -144,6 +146,33 @@ class Transfer extends Contract {
       await ctx.stub.putState(shipmentKey,shipment.toBuffer());
 
       return shipment;
+
+    } catch (e) {
+      console.log("This is the error: "+e);
+      console.log(e.stack);
+    }
+  }
+
+  async retailDrug(ctx,drugName,serialNo,retailerCRN,customerAadhar){
+    try {
+      // validation
+      let msp = ctx.clientIdentity.getMSPID();
+      // drug key
+      let drugKey = ctx.stub.createCompositeKey(Drug.getClass(),[drugName,serialNo]);
+      let drug  = await ctx.stub.getState(drugKey);
+      drug = Drug.fromBuffer(drug);
+      // Retailer companyKey
+      let iterator_retail = await ctx.stub.getStateByPartialCompositeKey(Company.getClass(),[retailerCRN]);
+      let retail = await getAllResults(iterator_retail);
+      let retailObject = JSON.parse(retail[0]);
+      if(drug.owner !== retailObject.companyID){
+        throw new Error("Not the owner");
+      }
+      //  owner changed
+      drug.owner = customerAadhar;
+      await ctx.stub.putState(drugKey,drug.toBuffer());
+
+      return drug;
 
     } catch (e) {
       console.log("This is the error: "+e);
