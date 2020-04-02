@@ -28,20 +28,20 @@ channels:
       - orderer.drug-network.com
     peers:
       peer0.manufacturer.drug-network.com:
-        endorsingPeer: false
-        chaincodeQuery: false
+        endorsingPeer: true
+        chaincodeQuery: true
         ledgerQuery: true
-        eventSource: false
+        eventSource: true
       peer1.manufacturer.drug-network.com:
         endorsingPeer: false
         chaincodeQuery: false
         ledgerQuery: true
         eventSource: false
       peer0.distributor.drug-network.com:
-        endorsingPeer: true
-        chaincodeQuery: true
+        endorsingPeer: false
+        chaincodeQuery: false
         ledgerQuery: true
-        eventSource: true
+        eventSource: false
       peer1.distributor.drug-network.com:
         endorsingPeer: false
         chaincodeQuery: false
