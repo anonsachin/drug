@@ -25,7 +25,9 @@ async function main(certificatePath, privateKeyPath){
   }
 }
 
-main('/home/upgrad/drug/network/crypto-config/peerOrganizations/manufacturer.drug-network.com/users/Admin@manufacturer.drug-network.com/msp/signcerts/Admin@manufacturer.drug-network.com-cert.pem','/home/upgrad/drug/network/crypto-config/peerOrganizations/manufacturer.drug-network.com/users/Admin@manufacturer.drug-network.com/msp/keystore/9775d4330cd44263b2790c4f6fb003b3095fa2c5e4bd4494cf8fbfc708ed6009_sk').then(() =>{
+let pKey = '/home/upgrad/drug/network/crypto-config/peerOrganizations/manufacturer.drug-network.com/users/Admin@manufacturer.drug-network.com/msp/keystore/0930ea91c10438a21cef72c6e480cb130f70d8b240a85cf9f67a8d96678f7cda_sk'
+
+main('/home/upgrad/drug/network/crypto-config/peerOrganizations/manufacturer.drug-network.com/users/Admin@manufacturer.drug-network.com/msp/signcerts/Admin@manufacturer.drug-network.com-cert.pem',pKey).then(() =>{
   console.log("Identity created!!!");
 })
 
