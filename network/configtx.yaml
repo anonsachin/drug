@@ -86,6 +86,24 @@ Organizations:
       - Host: peer0.retailer.drug-network.com
         Port: 13051
 
+  - &consumer
+    Name: consumerMSP
+    ID: consumerMSP
+    MSPDir: crypto-config/peerOrganizations/consumer.drug-network.com/msp
+    Policies:
+      Readers:
+        Type: Signature
+        Rule: "OR('consumerMSP.admin', 'consumerMSP.peer', 'consumerMSP.client')"
+      Writers:
+        Type: Signature
+        Rule: "OR('consumerMSP.admin', 'consumerMSP.peer', 'consumerMSP.client')"
+      Admins:
+        Type: Signature
+        Rule: "OR('consumerMSP.admin', 'consumerMSP.peer', 'consumerMSP.client')"
+    AnchorPeers:
+      - Host: peer0.consumer.drug-network.com
+        Port: 15051
+
 
 
 #Capabilities
@@ -185,6 +203,7 @@ Profiles:
           - *distributor
           - *transporter
           - *retailer
+          - *consumer
 
   drugChannel:
     Consortium: drugConsortium
@@ -195,5 +214,6 @@ Profiles:
         - *distributor
         - *transporter
         - *retailer
+        - *consumer
       Capabilities:
         <<: *ApplicationCapabilities

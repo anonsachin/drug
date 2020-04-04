@@ -212,3 +212,49 @@ services:
     ports:
       - 14051:14051
       - 14053:14053
+
+  peer0.consumer.drug-network.com:
+    container_name: peer0.consumer.drug-network.com
+    extends:
+      file: docker-compose-peer.yaml
+      service: peer-base
+    environment:
+      - CORE_PEER_ID=peer0.consumer.drug-network.com
+      - CORE_PEER_ADDRESS=peer0.consumer.drug-network.com:15051
+      - CORE_PEER_LISTENADDRESS=0.0.0.0:15051
+      - CORE_PEER_CHAINCODEADDRESS=peer0.consumer.drug-network.com:15053
+      - CORE_PEER_CHAINCODELISTENADDRESS=0.0.0.0:15053
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer0.consumer.drug-network.com:15051
+      - CORE_PEER_GOSSIP_BOOTSTRAP=peer1.consumer.drug-network.com:16051
+      - CORE_PEER_LOCALMSPID=consumerMSP
+    volumes:
+      - /var/run/:/host/var/run/
+      - ../crypto-config/peerOrganizations/consumer.drug-network.com/peers/peer0.consumer.drug-network.com/msp:/etc/hyperledger/fabric/msp
+      - ../crypto-config/peerOrganizations/consumer.drug-network.com/peers/peer0.consumer.drug-network.com/tls:/etc/hyperledger/fabric/tls
+      - peer0.consumer.drug-network.com:/var/hyperledger/production
+    ports:
+      - 15051:15051
+      - 15053:15053
+
+  peer1.consumer.drug-network.com:
+    container_name: peer1.consumer.drug-network.com
+    extends:
+      file: docker-compose-peer.yaml
+      service: peer-base
+    environment:
+      - CORE_PEER_ID=peer1.consumer.drug-network.com
+      - CORE_PEER_ADDRESS=peer1.consumer.drug-network.com:16051
+      - CORE_PEER_LISTENADDRESS=0.0.0.0:16051
+      - CORE_PEER_CHAINCODEADDRESS=peer1.consumer.drug-network.com:16053
+      - CORE_PEER_CHAINCODELISTENADDRESS=0.0.0.0:16053
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer1.consumer.drug-network.com:16051
+      - CORE_PEER_GOSSIP_BOOTSTRAP=peer0.consumer.drug-network.com:15051
+      - CORE_PEER_LOCALMSPID=consumerMSP
+    volumes:
+      - /var/run/:/host/var/run/
+      - ../crypto-config/peerOrganizations/consumer.drug-network.com/peers/peer1.consumer.drug-network.com/msp:/etc/hyperledger/fabric/msp
+      - ../crypto-config/peerOrganizations/consumer.drug-network.com/peers/peer1.consumer.drug-network.com/tls:/etc/hyperledger/fabric/tls
+      - peer1.consumer.drug-network.com:/var/hyperledger/production
+    ports:
+      - 16051:16051
+      - 16053:16053

@@ -10,6 +10,8 @@ volumes:
   peer1.transporter.drug-network.com:
   peer0.retailer.drug-network.com:
   peer1.retailer.drug-network.com:
+  peer0.consumer.drug-network.com:
+  peer1.consumer.drug-network.com:
 
 networks:
   drug:
@@ -79,6 +81,21 @@ services:
     volumes:
       - ./crypto-config/peerOrganizations/retailer.drug-network.com/ca/:/etc/hyperledger/fabric-ca-server-config
     container_name: ca.retailer.drug-network.com
+    networks:
+      - drug
+
+  ca.consumer.drug-network.com:
+    image: hyperledger/fabric-ca:latest
+    environment:
+      - FABRIC_CA_HOME=/etc/hyperledger/fabric-ca-server
+      - FABRIC_CA_SERVER_CA_NAME=ca.consumer.drug-network.com
+      - FABRIC_CA_SERVER_TLS_ENABLED=false
+    ports:
+      - "11054:7054"
+    command: sh -c 'fabric-ca-server start -b admin:adminpw -d'
+    volumes:
+      - ./crypto-config/peerOrganizations/consumer.drug-network.com/ca/:/etc/hyperledger/fabric-ca-server-config
+    container_name: ca.consumer.drug-network.com
     networks:
       - drug
 
@@ -154,6 +171,22 @@ services:
     networks:
       - drug
 
+  peer0.consumer.drug-network.com:
+    container_name: peer0.consumer.drug-network.com
+    extends:
+      file: docker-base/docker-compose-base.yaml
+      service: peer0.consumer.drug-network.com
+    networks:
+      - drug
+
+  peer1.consumer.drug-network.com:
+    container_name: peer1.consumer.drug-network.com
+    extends:
+      file: docker-base/docker-compose-base.yaml
+      service: peer1.consumer.drug-network.com
+    networks:
+      - drug
+
   cli:
     container_name: cli
     image: hyperledger/fabric-tools:latest
@@ -193,6 +226,8 @@ services:
       - peer1.transporter.drug-network.com
       - peer0.retailer.drug-network.com
       - peer1.retailer.drug-network.com
+      - peer0.consumer.drug-network.com
+      - peer1.consumer.drug-network.com
     networks:
       - drug
 

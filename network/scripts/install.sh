@@ -40,14 +40,14 @@ setGlobals(){
     else
       CORE_PEER_ADDRESS=peer1.transporter.drug-network.com:12051
     fi
-  # elif [ "$ORG" == 'consumer' ]; then
-  #   CORE_PEER_LOCALMSPID="consumerMSP"
-  #   CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/consumer.drug-network.com/users/Admin@consumer.drug-network.com/msp
-  #   if [ "$PEER" -eq 0 ]; then
-  #     CORE_PEER_ADDRESS=peer0.consumer.drug-network.com:10051
-  #   else
-  #     CORE_PEER_ADDRESS=peer1.consumer.drug-network.com:10151
-  #   fi
+  elif [ "$ORG" == 'consumer' ]; then
+    CORE_PEER_LOCALMSPID="consumerMSP"
+    CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/consumer.drug-network.com/users/Admin@consumer.drug-network.com/msp
+    if [ "$PEER" -eq 0 ]; then
+      CORE_PEER_ADDRESS=peer0.consumer.drug-network.com:15051
+    else
+      CORE_PEER_ADDRESS=peer1.consumer.drug-network.com:16051
+    fi
   else
     echo "Not a valid peerOrganization"
   fi
@@ -55,7 +55,7 @@ setGlobals(){
 
 # install chaincode
 
-ORGS="manufacturer transporter distributor retailer"
+ORGS="manufacturer transporter distributor retailer consumer"
 
 for iG in $ORGS; do
   for p in 0 1; do
