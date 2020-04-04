@@ -8,7 +8,7 @@ docker ps -a
 
 sleep 1
 echo "Waiting for all the containers to set up"
-sleep 9
+sleep 12
 
 echo "#############################################################################"
 echo "###################### CREATING CHANNEL AND JOINING #########################"

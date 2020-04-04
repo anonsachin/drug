@@ -76,18 +76,18 @@ if [ $res -ne 0 ]; then
 fi
 echo
 
-# echo "#################################################################"
-# echo "######### GENERATING ANCHOR PEER UPDATE TX ######################"
-# echo "#################################################################"
-#
-# set -x
-# configtxgen -profile drugChannel -outputAnchorPeersUpdate ./channel-artifacts/retailerMSPanchor.tx -channelID "$CHANNEL_NAME" -asOrg retailerMSP
-# res=$?
-# set +x
-# if [ res -ne 0 ]; then
-#   echo "Update transaction not successful"
-# fi
-# echo
+echo "#################################################################"
+echo "######### GENERATING ANCHOR PEER UPDATE TX ######################"
+echo "#################################################################"
+
+set -x
+configtxgen -profile drugChannel -outputAnchorPeersUpdate ./channel-artifacts/retailerMSPanchor.tx -channelID "$CHANNEL_NAME" -asOrg retailerMSP
+res=$?
+set +x
+if [ $res -ne 0 ]; then
+  echo "Update transaction not successful"
+fi
+echo
 
 # echo "#################################################################"
 # echo "######### GENERATING ANCHOR PEER UPDATE TX ######################"

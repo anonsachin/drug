@@ -25,3 +25,10 @@ PeerOrgs:
       Count: 2
    Users:
       Count: 0
+ - Name: retailer
+   Domain: retailer.drug-network.com
+   EnableNodeOUs: true
+   Template:
+      Count: 2
+   Users:
+      Count: 0

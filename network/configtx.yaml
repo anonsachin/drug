@@ -68,6 +68,24 @@ Organizations:
       - Host: peer0.transporter.drug-network.com
         Port: 11051
 
+  - &retailer
+    Name: retailerMSP
+    ID: retailerMSP
+    MSPDir: crypto-config/peerOrganizations/retailer.drug-network.com/msp
+    Policies:
+      Readers:
+        Type: Signature
+        Rule: "OR('retailerMSP.admin', 'retailerMSP.peer', 'retailerMSP.client')"
+      Writers:
+        Type: Signature
+        Rule: "OR('retailerMSP.admin', 'retailerMSP.peer', 'retailerMSP.client')"
+      Admins:
+        Type: Signature
+        Rule: "OR('retailerMSP.admin', 'retailerMSP.peer', 'retailerMSP.client')"
+    AnchorPeers:
+      - Host: peer0.retailer.drug-network.com
+        Port: 13051
+
 
 
 #Capabilities
@@ -166,6 +184,7 @@ Profiles:
           - *manufacturer
           - *distributor
           - *transporter
+          - *retailer
 
   drugChannel:
     Consortium: drugConsortium
@@ -175,5 +194,6 @@ Profiles:
         - *manufacturer
         - *distributor
         - *transporter
+        - *retailer
       Capabilities:
         <<: *ApplicationCapabilities

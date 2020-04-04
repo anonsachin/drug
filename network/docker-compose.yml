@@ -8,6 +8,8 @@ volumes:
   peer1.distributor.drug-network.com:
   peer0.transporter.drug-network.com:
   peer1.transporter.drug-network.com:
+  peer0.retailer.drug-network.com:
+  peer1.retailer.drug-network.com:
 
 networks:
   drug:
@@ -62,6 +64,21 @@ services:
     volumes:
       - ./crypto-config/peerOrganizations/transporter.drug-network.com/ca/:/etc/hyperledger/fabric-ca-server-config
     container_name: ca.transporter.drug-network.com
+    networks:
+      - drug
+
+  ca.retailer.drug-network.com:
+    image: hyperledger/fabric-ca:latest
+    environment:
+      - FABRIC_CA_HOME=/etc/hyperledger/fabric-ca-server
+      - FABRIC_CA_SERVER_CA_NAME=ca.retailer.drug-network.com
+      - FABRIC_CA_SERVER_TLS_ENABLED=false
+    ports:
+      - "10054:7054"
+    command: sh -c 'fabric-ca-server start -b admin:adminpw -d'
+    volumes:
+      - ./crypto-config/peerOrganizations/retailer.drug-network.com/ca/:/etc/hyperledger/fabric-ca-server-config
+    container_name: ca.retailer.drug-network.com
     networks:
       - drug
 
@@ -121,6 +138,22 @@ services:
     networks:
       - drug
 
+  peer0.retailer.drug-network.com:
+    container_name: peer0.retailer.drug-network.com
+    extends:
+      file: docker-base/docker-compose-base.yaml
+      service: peer0.retailer.drug-network.com
+    networks:
+      - drug
+
+  peer1.retailer.drug-network.com:
+    container_name: peer1.retailer.drug-network.com
+    extends:
+      file: docker-base/docker-compose-base.yaml
+      service: peer1.retailer.drug-network.com
+    networks:
+      - drug
+
   cli:
     container_name: cli
     image: hyperledger/fabric-tools:latest
@@ -158,6 +191,8 @@ services:
       - peer1.distributor.drug-network.com
       - peer0.transporter.drug-network.com
       - peer1.transporter.drug-network.com
+      - peer0.retailer.drug-network.com
+      - peer1.retailer.drug-network.com
     networks:
       - drug
 

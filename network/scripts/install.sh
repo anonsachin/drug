@@ -24,14 +24,14 @@ setGlobals(){
     else
       CORE_PEER_ADDRESS=peer1.distributor.drug-network.com:10051
     fi
-  # elif [ "$ORG" == 'retailer' ]; then
-  #   CORE_PEER_LOCALMSPID="retailerMSP"
-  #   CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/retailer.drug-network.com/users/Admin@retailer.drug-network.com/msp
-  #   if [ "$PEER" -eq 0 ]; then
-  #     CORE_PEER_ADDRESS=peer0.retailer.drug-network.com:9051
-  #   else
-  #     CORE_PEER_ADDRESS=peer1.retailer.drug-network.com:9151
-  #   fi
+  elif [ "$ORG" == 'retailer' ]; then
+    CORE_PEER_LOCALMSPID="retailerMSP"
+    CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/retailer.drug-network.com/users/Admin@retailer.drug-network.com/msp
+    if [ "$PEER" -eq 0 ]; then
+      CORE_PEER_ADDRESS=peer0.retailer.drug-network.com:13051
+    else
+      CORE_PEER_ADDRESS=peer1.retailer.drug-network.com:14051
+    fi
   elif [ "$ORG" == 'transporter' ]; then
     CORE_PEER_LOCALMSPID="transporterMSP"
     CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/transporter.drug-network.com/users/Admin@transporter.drug-network.com/msp
@@ -55,10 +55,10 @@ setGlobals(){
 
 # install chaincode
 
-ORGS="manufacturer transporter distributor" #retailer  consumer"
+ORGS="manufacturer transporter distributor retailer"
 
 for iG in $ORGS; do
-  for p in 0; do
+  for p in 0 1; do
     setGlobals $iG $p
     echo "##################################################################################"
     echo "################# INSTALLING CHAINCODE FOR $CORE_PEER_LOCALMSPID ####################"
