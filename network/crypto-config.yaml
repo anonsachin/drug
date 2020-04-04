@@ -10,18 +10,18 @@ PeerOrgs:
    Template:
       Count: 2
    Users:
-      Count: 1
+      Count: 0
  - Name: distributor
    Domain: distributor.drug-network.com
    EnableNodeOUs: true
    Template:
       Count: 2
    Users:
-      Count: 1
+      Count: 0
  - Name: transporter
    Domain: transporter.drug-network.com
    EnableNodeOUs: true
    Template:
       Count: 2
    Users:
-      Count: 1
+      Count: 0

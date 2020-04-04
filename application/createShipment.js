@@ -10,15 +10,15 @@ async function main(org,buyerCRN,drugName,listOfAssets,transporterCRN) {
     const contract = await gateway.getContractInstance(org,contract_Name);
 
     // extracting assets
-    let assets ={};
-    for (var i = 0; i < listOfAssets.length; i++) {
-      assets[String(i)] = listOfAssets[i];
-    }
-
-    assets['length'] = listOfAssets.length;
+    let assets = listOfAssets;
+    // for (var i = 0; i < listOfAssets.length; i++) {
+    //   assets[String(i)] = listOfAssets[i];
+    // }
+    //
+    // assets['length'] = listOfAssets.length;
 
     //  Creating a new company
-    console.log('Creating a company');
+    console.log('Creating a shipment');
     const buffer = await contract.submitTransaction('createShipment',buyerCRN,drugName,JSON.stringify(assets),transporterCRN);
 
     // process the output

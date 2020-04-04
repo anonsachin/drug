@@ -53,7 +53,7 @@ class Transfer extends Contract {
 
   async createShipment(ctx,buyerCRN,drugName,listOfAssets,transporterCRN){
     try {
-      listOfAssets = JSON.parse(listOfAssets)
+      // listOfAssets = JSON.parse(listOfAssets)
       // key
       let pokey = ctx.stub.createCompositeKey(Po.getClass(),[buyerCRN,drugName]);
       // retrieving the order
@@ -64,9 +64,9 @@ class Transfer extends Contract {
       let order = Po.fromBuffer(po);
       // extracting quantity
       let quantity = Number(order.quantity);
-
+      listOfAssets = JSON.parse(String(listOfAssets));
       // checking length
-      if(Number(listOfAssets.length) !== quantity){
+      if(Number(listOfAssets.length) !== Number(order.quantity)){
         throw new Error("There not enough assets in the list to create shipment");
       }
 

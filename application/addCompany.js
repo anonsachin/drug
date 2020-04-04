@@ -5,7 +5,7 @@ const contract_Name = 'org.drug-network.pharmanet.common';
 
 async function main(org,companyCRN, companyName, location, organisationRole) {
   try {
-
+    
     console.log('Starting');
     const contract = await gateway.getContractInstance(org,contract_Name);
 
