@@ -30,9 +30,9 @@ async function main(org,drugName,serialNo) {
   }
 }
 
-main("manufacturer","asprin","sn001").then(()=>{
-  console.log("Current state retrieved!!!");
-});
+// main("manufacturer","asprin","sn001").then(()=>{
+//   console.log("Current state retrieved!!!");
+// });
 // main("manufacturer","asprin","sn002").then(()=>{
 //   console.log("Current state retrieved!!!");
 // });

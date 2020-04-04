@@ -30,9 +30,9 @@ async function main(org,drugName, serialNo, mfgDate, expDate, companyCRN) {
   }
 }
 
-main("manufacturer","asprin","sn001","12/02/2020","12/08/2020","CRN002").then(()=>{
-  console.log("Drug has been added !!");
-});
+// main("manufacturer","asprin","sn001","12/02/2020","12/08/2020","CRN002").then(()=>{
+//   console.log("Drug has been added !!");
+// });
 //
 // main("manufacturer","asprin","sn002","12/02/2020","12/08/2020","CRN002").then(()=>{
 //   console.log("Drug has been added !!");

@@ -30,8 +30,8 @@ async function main(org,buyerCRN,sellerCRN,drugName,quantity) {
   }
 }
 
-main("manufacturer","CRN001","CRN002","asprin","2").then(()=>{
-  console.log("Purchase order placed!!");
-})
+// main("manufacturer","CRN001","CRN002","asprin","2").then(()=>{
+//   console.log("Purchase order placed!!");
+// })
 
 module.exports.run = main;

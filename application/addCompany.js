@@ -34,9 +34,9 @@ async function main(org,companyCRN, companyName, location, organisationRole) {
 //   console.log("created a company!!");
 // });
 
-main('manufacturer','CRN002','flipkart','Bangalore','Manufacturer').then(()=>{
-  console.log("created a company!!");
-});
+// main('manufacturer','CRN002','flipkart','Bangalore','Manufacturer').then(()=>{
+//   console.log("created a company!!");
+// });
 
 // main("manufacturer","CRN003","Fedex","Bangalore","Transporter").then(()=>{
 //   console.log("created a company!!");

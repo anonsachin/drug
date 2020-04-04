@@ -30,8 +30,8 @@ async function main(org,drugName,serialNo) {
   }
 }
 
-main("manufacturer","asprin","sn001").then(()=>{
-  console.log("History retrieved!!!");
-});
+// main("manufacturer","asprin","sn001").then(()=>{
+//   console.log("History retrieved!!!");
+// });
 
 module.exports.run = main;

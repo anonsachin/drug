@@ -30,8 +30,8 @@ async function main(org,buyerCRN,drugName,transporterCRN) {
   }
 }
 
-main("manufacturer","CRN001","asprin","CRN003").then(()=>{
-  console.log("shipment is created !!");
-})
+// main("manufacturer","CRN001","asprin","CRN003").then(()=>{
+//   console.log("shipment is created !!");
+// })
 
 module.exports.run = main;

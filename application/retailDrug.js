@@ -30,9 +30,9 @@ async function main(org,drugName,serialNo,retailerCRN,customerAadhar) {
   }
 }
 
-main("manufacturer","asprin","sn001","CRN001","sachin").then(()=>{
-  console.log("Drug has been sold");
-});
+// main("manufacturer","asprin","sn001","CRN001","sachin").then(()=>{
+//   console.log("Drug has been sold");
+// });
 
 
 module.exports.run = main;
