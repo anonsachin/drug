@@ -11,22 +11,23 @@ async function getContractInstance(org,contractName){
   const wallet = new FileSystemWallet('./identity/'+org);
 
   const fabricUserName = org+'_admin';
+  let connectionProfile = null;
   console.log('getting yaml');
   switch (org) {
     case 'manufacturer':
-      let connectionProfile = yaml.safeLoad(fs.readFileSync('./commonConnectionProfileMan.yaml','utf8'));
+      connectionProfile = yaml.safeLoad(fs.readFileSync('./commonConnectionProfileMan.yaml','utf8'));
       break;
     case 'distributor':
-      let connectionProfile = yaml.safeLoad(fs.readFileSync('./commonConnectionProfileDis.yaml','utf8'));
+      connectionProfile = yaml.safeLoad(fs.readFileSync('./commonConnectionProfileDis.yaml','utf8'));
       break;
     case 'transporter':
-      let connectionProfile = yaml.safeLoad(fs.readFileSync('./commonConnectionProfileTran.yaml','utf8'));
+      connectionProfile = yaml.safeLoad(fs.readFileSync('./commonConnectionProfileTran.yaml','utf8'));
       break;
     case 'retailer':
-      let connectionProfile = yaml.safeLoad(fs.readFileSync('./commonConnectionProfileRet.yaml','utf8'));
+      connectionProfile = yaml.safeLoad(fs.readFileSync('./commonConnectionProfileRet.yaml','utf8'));
       break;
     case 'consumer':
-      let connectionProfile = yaml.safeLoad(fs.readFileSync('./commonConnectionProfileCon.yaml','utf8'));
+      connectionProfile = yaml.safeLoad(fs.readFileSync('./commonConnectionProfileCon.yaml','utf8'));
       break;
     default:
       throw new Error('Not a valid organization');

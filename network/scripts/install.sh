@@ -85,7 +85,7 @@ echo "################# INSTALLING CHAINCODE ON $CORE_PEER_LOCALMSPID ##########
 echo "##################################################################################"
 
 set -x
-peer chaincode instantiate -o orderer.drug-network.com:7050 -C $CHANNEL_NAME -n $CHAINCODE_NAME -v 1.0 -c '{"Args":["org.drug-network.pharmanet.common:instantiate"]}' -P "OR ('manufacturerMSP.member','distributorMSP.member','transporterMSP.member')"
+peer chaincode instantiate -o orderer.drug-network.com:7050 -C $CHANNEL_NAME -n $CHAINCODE_NAME -v 1.0 -c '{"Args":["org.drug-network.pharmanet.common:instantiate"]}' -P "OR ('manufacturerMSP.member','distributorMSP.member','transporterMSP.member','retailerMSP.member','consumerMSP.member')"
 res=$?
 set +x
 if [ $res -ne 0 ]; then
