@@ -13,7 +13,7 @@ description: "Drug Network"
 version: "1.0"
 
 client:
-  organization: manufacturer
+  organization: retailer
   connection:
     timeout:
       peer:
@@ -28,10 +28,10 @@ channels:
       - orderer.drug-network.com
     peers:
       peer0.manufacturer.drug-network.com:
-        endorsingPeer: true
-        chaincodeQuery: true
+        endorsingPeer: false
+        chaincodeQuery: false
         ledgerQuery: true
-        eventSource: true
+        eventSource: false
       peer1.manufacturer.drug-network.com:
         endorsingPeer: false
         chaincodeQuery: false
@@ -58,10 +58,10 @@ channels:
         ledgerQuery: true
         eventSource: false
       peer0.retailer.drug-network.com:
-        endorsingPeer: false
-        chaincodeQuery: false
+        endorsingPeer: true
+        chaincodeQuery: true
         ledgerQuery: true
-        eventSource: false
+        eventSource: true
       peer1.retailer.drug-network.com:
         endorsingPeer: false
         chaincodeQuery: false

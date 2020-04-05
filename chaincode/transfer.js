@@ -14,7 +14,9 @@ class Transfer extends Contract {
     try {
       // validation
       let msp = ctx.clientIdentity.getMSPID();
-      // if( msp === 'distributorMSP' )
+      if( msp !== 'distributorMSP' && msp !== 'retailerMSP' ){
+        throw new Error('Not authorized organization');
+      }
 
       // Getting the buyer
       let iterator_buy = await ctx.stub.getStateByPartialCompositeKey(Company.getClass(),[buyerCRN]);
@@ -53,7 +55,7 @@ class Transfer extends Contract {
 
   async createShipment(ctx,buyerCRN,drugName,listOfAssets,transporterCRN){
     try {
-      // listOfAssets = JSON.parse(listOfAssets)
+      listOfAssets = JSON.parse(listOfAssets)
       // key
       let pokey = ctx.stub.createCompositeKey(Po.getClass(),[buyerCRN,drugName]);
       // retrieving the order
@@ -115,6 +117,9 @@ class Transfer extends Contract {
     try {
       // validation
       let msp = ctx.clientIdentity.getMSPID();
+      if (msp !== 'transporterMSP'){
+        throw new Error('Not authorized organization');
+      }
       // shipment key
       let shipmentKey = ctx.stub.createCompositeKey(Shipement.getClass(),[buyerCRN,drugName]);
       // shipment
@@ -157,6 +162,9 @@ class Transfer extends Contract {
     try {
       // validation
       let msp = ctx.clientIdentity.getMSPID();
+      if (msp !== 'retailerMSP'){
+        throw new Error('Not authorized organization');
+      }
       // drug key
       let drugKey = ctx.stub.createCompositeKey(Drug.getClass(),[drugName,serialNo]);
       let drug  = await ctx.stub.getState(drugKey);

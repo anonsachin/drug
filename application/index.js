@@ -23,7 +23,7 @@ app.set('title','Counterfeit Drug Detection');
 app.get('/',(req,res) => res.send('Counterfeit Drug Detection Server UP!!'));
 
 app.post('/createIdentity',(req,res) => {
-  createIdentity.run(req.body.certificatePath,req.body.privateKeyPath)
+  createIdentity.run(req.body.org,req.body.certificatePath,req.body.privateKeyPath)
       .then(() => {
         console.log('User wallet created');
         const result = {
@@ -43,7 +43,6 @@ app.post('/createIdentity',(req,res) => {
 });
 
 app.post('/addCompany',(req,res) => {
-  console.log("this is the org = "+req.body.org);
   addCompany.run(req.body.org,req.body.companyCRN,req.body.companyName,req.body.location,req.body.organisationRole)
       .then((company) =>{
         console.log("The company was created");

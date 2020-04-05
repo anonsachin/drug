@@ -12,7 +12,25 @@ async function getContractInstance(org,contractName){
 
   const fabricUserName = org+'_admin';
   console.log('getting yaml');
-  let connectionProfile = yaml.safeLoad(fs.readFileSync('./commonConnectionProfileMan.yaml','utf8'));
+  switch (org) {
+    case 'manufacturer':
+      let connectionProfile = yaml.safeLoad(fs.readFileSync('./commonConnectionProfileMan.yaml','utf8'));
+      break;
+    case 'distributor':
+      let connectionProfile = yaml.safeLoad(fs.readFileSync('./commonConnectionProfileDis.yaml','utf8'));
+      break;
+    case 'transporter':
+      let connectionProfile = yaml.safeLoad(fs.readFileSync('./commonConnectionProfileTran.yaml','utf8'));
+      break;
+    case 'retailer':
+      let connectionProfile = yaml.safeLoad(fs.readFileSync('./commonConnectionProfileRet.yaml','utf8'));
+      break;
+    case 'consumer':
+      let connectionProfile = yaml.safeLoad(fs.readFileSync('./commonConnectionProfileCon.yaml','utf8'));
+      break;
+    default:
+      throw new Error('Not a valid organization');
+  }
   console.log('Creating the options');
   let connectionOptions = {
     wallet: wallet,

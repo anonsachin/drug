@@ -4,17 +4,18 @@ const fs = require('fs');
 const { FileSystemWallet, X509WalletMixin } = require('fabric-network');
 const path = require('path');
 
-const wallet = new FileSystemWallet('./identity/manufacturer');
-
-async function main(certificatePath, privateKeyPath){
+async function main(org,certificatePath, privateKeyPath){
   try {
 
+    // wallet
+    const wallet = new FileSystemWallet('./identity/'+org);
     // reading the required files
     const certificate = fs.readFileSync(certificatePath).toString();
     const privatekey = fs.readFileSync(privateKeyPath).toString();
 
-    const identityLabel = 'manufacturer_admin';
-    const identity = X509WalletMixin.createIdentity('manufacturerMSP',certificate,privatekey);
+    const identityLabel = org+'_admin';
+    const msp = org+'MSP'
+    const identity = X509WalletMixin.createIdentity(msp,certificate,privatekey);
 
     await wallet.import(identityLabel, identity);
 
