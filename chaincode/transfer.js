@@ -55,6 +55,12 @@ class Transfer extends Contract {
 
   async createShipment(ctx,buyerCRN,drugName,listOfAssets,transporterCRN){
     try {
+
+      let msp = ctx.clientIdentity.getMSPID();
+      if( msp !== 'distributorMSP' && msp !== 'manufacturerMSP' ){
+        throw new Error('Not authorized organization');
+      }
+
       listOfAssets = JSON.parse(listOfAssets)
       // key
       let pokey = ctx.stub.createCompositeKey(Po.getClass(),[buyerCRN,drugName]);
@@ -81,9 +87,10 @@ class Transfer extends Contract {
         if(asset.toString() === ""){
           throw new Error("INVALID ID at postion :" + i);
         }
-        if( i === 0){
-          asset = Drug.fromBuffer(asset);
-          creator = asset.owner;
+        asset = Drug.fromBuffer(asset);
+        // creator = asset.owner;
+        if( asset.owner !== order.seller){
+          throw new Error("You are not the owner");
         }
         assets.push(assetKey);
       }
@@ -95,6 +102,11 @@ class Transfer extends Contract {
       let transporter = company.companyID;
       // key
       let shipmentKey = ctx.stub.createCompositeKey(Shipement.getClass(),[buyerCRN,drugName]);
+      // validate shipment
+      let shipBuffer = await ctx.stub.getState(shipmentKey);
+      if(shipBuffer.toString() !== ""){
+        throw new Error("Shipment already exist");
+      }
       // Create Shipement
       let shipment = {
         shipmentID: shipmentKey,
@@ -168,6 +180,9 @@ class Transfer extends Contract {
       // drug key
       let drugKey = ctx.stub.createCompositeKey(Drug.getClass(),[drugName,serialNo]);
       let drug  = await ctx.stub.getState(drugKey);
+      if(drug.toString() === ""){
+        throw new Error("Drug Does'nt Exist");
+      }
       drug = Drug.fromBuffer(drug);
       // Retailer companyKey
       let iterator_retail = await ctx.stub.getStateByPartialCompositeKey(Company.getClass(),[retailerCRN]);

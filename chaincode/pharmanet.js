@@ -32,6 +32,11 @@ class Pharmanet extends Contract{
     }
     // creating companyKey
     let companyKey = ctx.stub.createCompositeKey(Company.getClass(),[companyCRN,companyName]);
+    // checking if company already exists
+    let coBuffer = await ctx.stub.getState(companyKey);
+    if(coBuffer.toString() !== ""){
+      throw new Error("This company already exists!!");
+    }
     // creating json
     let company = {
       companyID: companyKey,
@@ -84,7 +89,7 @@ async function getAllResults(iterator) {
   const allResults = [];
   while (true) {
       const res = await iterator.next();
-      
+
       if (res.value) {
           // if not a getHistoryForKey iterator then key is contained in res.value.key
           allResults.push(res.value.value.toString('utf8'));
